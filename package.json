@@ -1,10 +1,11 @@
 {
-  "name": "node-lista-contatos",
+  "name": "lista-contatos",
   "version": "1.0.0",
   "description": "Lista de contatos",
   "main": "src/server.ts",
+  "type": "module",
   "scripts": {
-   "dev": "node --import=tsx --watch ./src/server.ts"
+    "dev": "nodemon /src/server.ts"
   },
   "author": "",
   "license": "ISC",
@@ -14,8 +15,11 @@
   },
   "devDependencies": {
     "@types/express": "^4.17.21",
-    "@types/node": "^22.2.0",
+    "@types/node": "^22.3.0",
+    "nodemon": "^3.1.4",
+    "ts-node": "^10.9.2",
     "tsx": "^4.17.0",
     "typescript": "^5.5.4"
-  }
+  },
+  "keywords": []
 }
