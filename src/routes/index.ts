@@ -1,7 +1,6 @@
 import express from 'express';
-import { readFile, writeFile } from 'fs/promises';
+import { createContact, deleteContact, getContacts } from '../services/contacts';
 
-const dataSource = './data/list.txt';
 
 const router = express.Router();
 
@@ -12,27 +11,14 @@ router.post('/contato', async(req, res) => {
     if(!name || name.length < 2) {
         return res.json({error: 'Nome Precisa de pelo menos 2 caracteres.'});
     }
-    // processamento dos dados
-    let list: string[] = [];
-    try{
-        const data = await readFile(dataSource, { encoding: 'utf8'});
-        list = data.split('\n');
-        
-    } catch(err) { }
-
-    list.push(name);
-    await writeFile(dataSource, list.join('/n'));
+    
+    await createContact(name);
 
     res.status(201).json({ contato: name});
 });
 // Pegando lista de contatos
 router.get('/contatos', async (req, res) => {
-    let list: string[] = [];
-    try{
-        const data = await readFile(dataSource, { encoding: 'utf8'});
-        list = data.split('\n');
-        
-    } catch(err) { }
+    let list = await getContacts();
 
     res.json( {contatos: list});
 })
@@ -43,16 +29,8 @@ router.delete('/contato', async (req, res) => {
     if(!name) { 
         return res.json( { error: 'O nome não encontra na lista'});
     }
-    let list: string[] = [];
-    try{
-        const data = await readFile(dataSource, { encoding: 'utf8'});
-        list = data.split('\n');
-        
-    } catch(err) { }
 
-    list = list.filter(item => item.toLowerCase() !== (name as string).toLowerCase()); //O texto pode ser escrito em maiusculo ou minusculo
-
-    await writeFile(dataSource, list.join('\n'));
+    await deleteContact(name as string);
 
     res.json( {contatos: list});
 })
