@@ -50,7 +50,7 @@ router.delete('/contato', async (req, res) => {
         
     } catch(err) { }
 
-    list = list.filter(item => item.toLowerCase() !== (name as string).toLowerCase());
+    list = list.filter(item => item.toLowerCase() !== (name as string).toLowerCase()); //O texto pode ser escrito em maiusculo ou minusculo
 
     await writeFile(dataSource, list.join('\n'));
 
