@@ -14,7 +14,6 @@ router.post('/contato', async(req, res) => {
     }
     // processamento dos dados
     let list: string[] = [];
-
     try{
         const data = await readFile(dataSource, { encoding: 'utf8'});
         list = data.split('\n');
@@ -26,5 +25,37 @@ router.post('/contato', async(req, res) => {
 
     res.status(201).json({ contato: name});
 });
+// Pegando lista de contatos
+router.get('/contatos', async (req, res) => {
+    let list: string[] = [];
+    try{
+        const data = await readFile(dataSource, { encoding: 'utf8'});
+        list = data.split('\n');
+        
+    } catch(err) { }
+
+    res.json( {contatos: list});
+})
+// Excluindo contato de uma lista
+router.delete('/contato', async (req, res) => {
+    const { name } = req.query;
+
+    if(!name) { 
+        return res.json( { error: 'O nome não encontra na lista'});
+    }
+    let list: string[] = [];
+    try{
+        const data = await readFile(dataSource, { encoding: 'utf8'});
+        list = data.split('\n');
+        
+    } catch(err) { }
+
+    list = list.filter(item => item.toLowerCase() !== (name as string).toLowerCase());
+
+    await writeFile(dataSource, list.join('\n'));
+
+    res.json( {contatos: list});
+})
+
 
 export default router;
